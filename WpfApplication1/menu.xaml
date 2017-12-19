@@ -1,0 +1,79 @@
+﻿<Controls:MetroWindow
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:WpfApplication1" x:Name="principal"
+        x:Class="WpfApplication1.menu"
+        Title="menu" Background="Gainsboro" Height="550" Width="424" WindowStartupLocation="CenterScreen">
+    <Canvas Margin="0,0,574,0">
+        <Controls:Tile x:Name="btnVentas" Margin="0" Width="Auto" Height="174" Title="Ventas" TitleFontSize="16" Canvas.Left="32" Canvas.Top="94" Click="btnVentas_Click" >
+
+            <Image Source="Imagenes/img_ventas.png" Width="184" Height="149"/>
+        </Controls:Tile>
+        <Controls:Tile x:Name="btnCompras" Margin="0" Width="172" Height="174" Title="Compras" TitleFontSize="16" Background="#CCA20025" Canvas.Left="217" Canvas.Top="94" Click="btnCompras_Click" >
+            <Image Source="imagenes/img_compras.png" Width="138" Height="122"/>
+        </Controls:Tile>
+        <Controls:Tile x:Name="btnCobros" Margin="32,274,781,99" Width="Auto" Height="Auto" Title="Cobros" TitleFontSize="16" Background="#CCA20025" >
+            <Image Source="imagenes/img_cobros.png" Width="182" Height="174"/>
+        </Controls:Tile>
+        <Controls:Tile Margin="0" Width="Auto" Height="174" Title="Usuarios" TitleFontSize="16" Background="#CCA20025" Canvas.Left="217" Canvas.Top="274" >
+            <Image Source="imagenes/img_user.png" Width="172" Height="149"/>
+        </Controls:Tile>
+        <Canvas Height="522" Canvas.Left="424" Width="600"/>
+        
+
+
+        <Controls:Flyout x:Name="flyVentas" Canvas.Left="424" Height="522" Width="600" Header="Integrar Ventas" Position="Right" Foreground="White" ClosingFinished="flyVentas_ClosingFinished" Theme="Light">
+            <Controls:Flyout.Background>
+                <SolidColorBrush Color="#FF020202" Opacity="0.8"/>
+            </Controls:Flyout.Background>
+            <Canvas>
+                <DatePicker x:Name="dpFechaIni" Canvas.Left="10" Canvas.Top="11" RenderTransformOrigin="0.45,0.115" Controls:TextBoxHelper.Watermark="Fecha Inicio" DisplayDateStart="2016-01-01"/>
+                <DatePicker x:Name="dpFechaFin" Canvas.Left="136" Canvas.Top="11" Controls:TextBoxHelper.Watermark="Fecha Fin"/>
+                <ComboBox x:Name="cmbFecha" Canvas.Left="268" Canvas.Top="11" Width="213" ItemsSource="{Binding Path= ListaMostrar}" SelectionChanged="cmbFecha_SelectionChanged"/>
+                <Button x:Name="btnSincronizar" Content="Sincronizar" Width="98" Canvas.Left="492" Canvas.Top="10" Click="btnSincronizar_Click"/>
+                <GroupBox Canvas.Left="10" Margin="0" Canvas.Top="41" Width="580" Height="61" Header="TIENDAS">
+                    <Canvas>
+                        <RadioButton x:Name="rbMiraflores" Canvas.Top="3" Canvas.Left="26" Content="Miraflores" Foreground="White"  IsChecked="True" Background="White" Controls:ControlsHelper.FocusBorderBrush="#FFF3FF00"/>
+                        <RadioButton x:Name="rbEncalada" Canvas.Left="165" Canvas.Top="3" Content="Encalada" Foreground="White"/>
+                        <RadioButton x:Name="rbCavenecia" Canvas.Left="296" Canvas.Top="3" Content="Cavenecia Caja 1" Foreground="White"/>
+                        <RadioButton x:Name="rbCavenecia2" Canvas.Left="447" Canvas.Top="4" Content="Cavenecia Caja 2" Foreground="White"/>
+                    </Canvas>
+                </GroupBox>
+                <DataGrid x:Name="dgVenta" Canvas.Left="10" Canvas.Top="107" Height="201" Width="580" ItemsSource="{Binding}" >
+
+                </DataGrid>
+
+            </Canvas>
+        </Controls:Flyout>
+
+        <Controls:Flyout x:Name="flyCompras" Canvas.Left="424" Height="522" Width="600" Header="Integrar Compras" Position="Right" Foreground="White" ClosingFinished="flyCompras_ClosingFinished">
+            <Controls:Flyout.Background>
+                <SolidColorBrush Color="#FF020202" Opacity="0.8"/>
+            </Controls:Flyout.Background>
+
+            <Canvas>
+                <DatePicker x:Name="dpcFechaIni" Canvas.Left="10" Canvas.Top="11" RenderTransformOrigin="0.45,0.115" Controls:TextBoxHelper.Watermark="Fecha Inicio"/>
+                <DatePicker x:Name="dpcFechaFin" Canvas.Left="136" Canvas.Top="11" Controls:TextBoxHelper.Watermark="Fecha Fin"/>
+                <ComboBox x:Name="cmbcFecha" Canvas.Left="268" Canvas.Top="11" Width="213" ItemsSource="{Binding Path= ListaMostrar}" SelectionChanged="cmbFecha_SelectionChanged"/>
+                <Button x:Name="btncSincronizar" Content="Sincronizar" Width="98" Canvas.Left="492" Canvas.Top="10" Click="btncSincronizar_Click" />
+                <GroupBox Canvas.Left="10" Margin="0" Canvas.Top="41" Width="580" Height="61" Header="TIENDAS">
+                    <Canvas>
+                        <RadioButton x:Name="rbcMiraflores" Canvas.Top="3" Canvas.Left="26" Content="Miraflores" Foreground="White"  IsChecked="True" Background="White" Controls:ControlsHelper.FocusBorderBrush="#FFF3FF00"/>
+                        <RadioButton x:Name="rbcEncalada" Canvas.Left="165" Canvas.Top="3" Content="Encalada" Foreground="White"/>
+                        <RadioButton x:Name="rbcCavenecia" Canvas.Left="296" Canvas.Top="3" Content="Cavenecia Caja 1" Foreground="White"/>
+                        <RadioButton x:Name="rbcCavenecia2" Canvas.Left="447" Canvas.Top="4" Content="Cavenecia Caja 2" Foreground="White"/>
+                    </Canvas>
+                </GroupBox>
+                <DataGrid x:Name="dgcVenta" Canvas.Left="10" Canvas.Top="107" Height="201" Width="580" ItemsSource="{Binding}" >
+
+                </DataGrid>
+
+            </Canvas>
+        </Controls:Flyout>
+
+    </Canvas>
+
+</Controls:MetroWindow>

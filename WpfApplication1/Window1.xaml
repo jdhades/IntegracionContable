@@ -1,0 +1,30 @@
+﻿<Controls:MetroWindow x:Name="wTest" x:Class="WpfApplication1.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"              
+        Title="Window1" Height="500" Width="1024" Activated="wTest_Activated">
+    <Controls:MetroWindow.Resources>
+        <Style x:Key="MenuLevel2" BasedOn="{StaticResource MetroTabItem}" TargetType="{x:Type TabItem}">
+            <Setter Property="mah:ControlsHelper.HeaderFontSize" Value="16"></Setter>
+        </Style>
+    </Controls:MetroWindow.Resources>
+    <Grid>
+        <DatePicker x:Name="dpFecha1" HorizontalAlignment="Left" Margin="26,23,0,0" VerticalAlignment="Top"/>
+        <DatePicker x:Name="dpFecha2" HorizontalAlignment="Left" Margin="149,23,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnBuscar" Content="Button" HorizontalAlignment="Left" Margin="270,23,0,0" VerticalAlignment="Top" Width="127" Click="btnBuscar_Click"/>
+        <DataGrid HorizontalAlignment="Left" Height="234" VerticalAlignment="Top" Width="754" Margin="26,74,0,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Cuenta" Width="150"/>
+                <DataGridTextColumn Header="Serie" Width="150"/>
+                <DataGridTextColumn Header="Número" Width="150"/>
+                <DataGridTextColumn Header="Debe" Width="150"/>
+                <DataGridTextColumn Header="Haber" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <ComboBox x:Name="cmbFecha" HorizontalAlignment="Left" Margin="430,23,0,0" VerticalAlignment="Top" Width="190"/>
+    </Grid>
+</Controls:MetroWindow>
+
