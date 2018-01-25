@@ -70,6 +70,7 @@
     <Compile Include="MainWindowsViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="message\MessageViewModel.cs" />
+    <Compile Include="Model\mCompras.cs" />
     <Compile Include="Model\mCobros.cs" />
     <Compile Include="Model\MostrarLista.cs" />
     <Compile Include="Model\mVentas.cs" />

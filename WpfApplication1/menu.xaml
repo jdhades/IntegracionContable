@@ -6,23 +6,24 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:WpfApplication1" x:Name="principal"
         x:Class="WpfApplication1.menu"
-        Title="menu" Background="Gainsboro" Height="550" Width="424" WindowStartupLocation="CenterScreen">
-    <Canvas Margin="0,0,574,0">
-        <Controls:Tile x:Name="btnVentas" Margin="0" Width="Auto" Height="174" Title="Ventas" TitleFontSize="16" Canvas.Left="32" Canvas.Top="94" Click="btnVentas_Click" >
+        Title="IntegraConta" Background="Gainsboro" Height="550" Width="424" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" IsMaxRestoreButtonEnabled="False" ShowMaxRestoreButton="False">
 
-            <Image Source="Imagenes/img_ventas.png" Width="184" Height="149"/>
+
+    <Canvas Margin="0,0,574,0">
+        <Controls:Tile x:Name="btnVentas" Margin="0" Width="172" Height="174" Title="Ventas" TitleFontSize="16" Canvas.Left="40" Canvas.Top="94" Click="btnVentas_Click" >
+            <Image Source="Imagenes/img_ventas.png" Width="148" Height="122"/>
         </Controls:Tile>
-        <Controls:Tile x:Name="btnCompras" Margin="0" Width="172" Height="174" Title="Compras" TitleFontSize="16" Background="#CCA20025" Canvas.Left="217" Canvas.Top="94" Click="btnCompras_Click" >
-            <Image Source="imagenes/img_compras.png" Width="138" Height="122"/>
+        <Controls:Tile x:Name="btnCompras"  Margin="0" Width="172" Height="174" Title="Compras" TitleFontSize="16" Background="#CCA20025" Canvas.Left="40" Canvas.Top="274" Click="btnCompras_Click" >
+            <Image Source="imagenes/img_compras.png" Width="148" Height="122"/>
         </Controls:Tile>
-        <Controls:Tile x:Name="btnCobros" Margin="32,274,781,99" Width="Auto" Height="Auto" Title="Cobros" TitleFontSize="16" Background="#CCA20025" >
-            <Image Source="imagenes/img_cobros.png" Width="182" Height="174"/>
+        <Controls:Tile x:Name="btnCobros" Margin="0" Width="172" Height="174" Title="Cobros" TitleFontSize="16" Background="#CCA20025" Canvas.Left="217" Canvas.Top="94" Click="btnCobros_Click" >
+               <Image Source="imagenes/img_cobros.png" Width="148" Height="122"/>
         </Controls:Tile>
         <Controls:Tile Margin="0" Width="Auto" Height="174" Title="Usuarios" TitleFontSize="16" Background="#CCA20025" Canvas.Left="217" Canvas.Top="274" >
             <Image Source="imagenes/img_user.png" Width="172" Height="149"/>
         </Controls:Tile>
         <Canvas Height="522" Canvas.Left="424" Width="600"/>
-        
+
 
 
         <Controls:Flyout x:Name="flyVentas" Canvas.Left="424" Height="522" Width="600" Header="Integrar Ventas" Position="Right" Foreground="White" ClosingFinished="flyVentas_ClosingFinished" Theme="Light">
@@ -49,11 +50,16 @@
             </Canvas>
         </Controls:Flyout>
 
-        <Controls:Flyout x:Name="flyCompras" Canvas.Left="424" Height="522" Width="600" Header="Integrar Compras" Position="Right" Foreground="White" ClosingFinished="flyCompras_ClosingFinished">
-            <Controls:Flyout.Background>
-                <SolidColorBrush Color="#FF020202" Opacity="0.8"/>
-            </Controls:Flyout.Background>
-
+        <Controls:Flyout 
+            x:Name="flyCobros" 
+            Canvas.Left="424" 
+            Height="522" 
+            Width="600" 
+            Header="Integrar Cobro" 
+            Position="Right" 
+            Foreground="White" 
+            ClosingFinished="flyCompras_ClosingFinished">
+            
             <Canvas>
                 <DatePicker x:Name="dpcFechaIni" Canvas.Left="10" Canvas.Top="11" RenderTransformOrigin="0.45,0.115" Controls:TextBoxHelper.Watermark="Fecha Inicio"/>
                 <DatePicker x:Name="dpcFechaFin" Canvas.Left="136" Canvas.Top="11" Controls:TextBoxHelper.Watermark="Fecha Fin"/>
@@ -74,6 +80,18 @@
             </Canvas>
         </Controls:Flyout>
 
+        <Controls:Flyout x:Name="flyCompras" Canvas.Left="424" Height="522" Width="600" Header="Integrar Compras" Position="Right" Foreground="White" ClosingFinished="flyPayment_ClosingFinished">
+            <Controls:Flyout.Background>
+                <SolidColorBrush Color="#FF020202" Opacity="0.8"/>
+            </Controls:Flyout.Background>
+
+            <Canvas>
+                <DatePicker x:Name="dppFechaIni" Canvas.Left="10" Canvas.Top="11" RenderTransformOrigin="0.45,0.115" Controls:TextBoxHelper.Watermark="Fecha Inicio"/>
+                <DatePicker x:Name="dppFechaFin" Canvas.Left="136" Canvas.Top="11" Controls:TextBoxHelper.Watermark="Fecha Fin"/>
+                <Button x:Name="btnpSincronizar" Content="Sincronizar" Width="98" Canvas.Left="492" Canvas.Top="10" Click="btnpSincronizar_Click"  />
+              
+            </Canvas>
+        </Controls:Flyout>
     </Canvas>
 
 </Controls:MetroWindow>

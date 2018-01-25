@@ -55,13 +55,20 @@ namespace WpfApplication1
             
         }
 
+        private void cerrarVentana(){
+            principal.Width = 424;
+            CenterWindowsOnScreen();
+            flyVentas.IsOpen = false;
+            flyCompras.IsOpen = false;
+        }
         private void btnVentas_Click(object sender, RoutedEventArgs e)
         {
             
             principal.Width= 1024;
             CenterWindowsOnScreen();
-            flyVentas.IsOpen = false;
+            //flyVentas.IsOpen = false;
             flyCompras.IsOpen = false;
+            flyCobros.IsOpen = false;
             flyVentas.IsOpen = true;
 
         }
@@ -71,7 +78,7 @@ namespace WpfApplication1
             principal.Width = 1024;
             CenterWindowsOnScreen();
             flyVentas.IsOpen = false;
-            flyCompras.IsOpen = false;
+            flyCobros.IsOpen = false;
             flyCompras.IsOpen = true;
         }
 
@@ -81,6 +88,7 @@ namespace WpfApplication1
             CenterWindowsOnScreen();
             flyVentas.IsOpen = false;
             flyCompras.IsOpen = false;
+            flyCobros.IsOpen = false;
             
         }
 
@@ -90,9 +98,19 @@ namespace WpfApplication1
             CenterWindowsOnScreen();
             flyVentas.IsOpen = false;
             flyCompras.IsOpen = false;
+            flyCobros.IsOpen = false;
         }
 
-              
+
+        private void btnCobros_Click(object sender, RoutedEventArgs e)
+        {
+            principal.Width = 1024;
+            CenterWindowsOnScreen();
+            flyVentas.IsOpen = false;
+            flyCompras.IsOpen = false;
+            flyCobros.IsOpen = true;
+        }
+   
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
             
@@ -198,6 +216,8 @@ namespace WpfApplication1
              DateTime inicio = DateTime.Parse(dpFechaIni.Text);
              DateTime final = DateTime.Parse(dpFechaFin.Text);
              TimeSpan dias = final - inicio;
+             
+             // HAY QUE CAMBIAR TODA ESTA VERGA PARA REDUCIR CODIGO
              for (DateTime i = inicio; i <= final; i = i.AddDays(1))
              {
                  if (dias.Days > 31)
@@ -253,6 +273,48 @@ namespace WpfApplication1
              }
          }
 
+         private void flyPayment_ClosingFinished(object sender, RoutedEventArgs e)
+         {
+             principal.Width = 424;
+             CenterWindowsOnScreen();
+             flyVentas.IsOpen = false;
+             flyCompras.IsOpen = false;
+         }
+
+         private void cmbpFecha_SelectionChanged(object sender, SelectionChangedEventArgs e)
+         {
+
+         }
+
+         private void btnpSincronizar_Click(object sender, RoutedEventArgs e)
+         {
+             Integracion ni = new Integracion();
+            
+             DateTime inicio = DateTime.Parse(dpFechaIni.Text);
+             DateTime final = DateTime.Parse(dpFechaFin.Text);
+             TimeSpan dias = final - inicio;
+             
+             // HAY QUE CAMBIAR TODA ESTA VERGA PARA REDUCIR CODIGO
+             for (DateTime i = inicio; i <= final; i = i.AddDays(1))
+             {
+                 if (dias.Days > 31)
+                 {
+                     MessageBoxResult result = MessageBox.Show("La diferencia entre fecha es mayor a 30 dias desea continuar?", "Advertencia", MessageBoxButton.OK, MessageBoxImage.Warning);
+                     if (result == MessageBoxResult.OK)
+                     {
+                         i = final;
+                     }
+
+                 }
+                 else
+                 {
+                     ni.verificarCompras(i.ToString("yyyyMMdd"), con, con2);
+                 }
+
+             }
+         }
+
+   
 
 
              // mv.BindData(con, fechaDia, tienda, buscarTienda);
