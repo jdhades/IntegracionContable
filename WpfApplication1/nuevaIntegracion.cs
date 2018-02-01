@@ -114,6 +114,86 @@ namespace WpfApplication1
         }
 
 
+        private void sincronizarCompra(string sAnio, string sPeriodo, string sLibro, string sGlosa, string sFechaSql, string sTienda,
+                             string iniFinFactura, string sucursal, string conx, string mov, string vou)
+        {
+
+            bool listo = false;
+            //   cobroTotal.Clear();
+
+            try
+            {
+                this.Ase_cNummov = mov;
+                this.Ase_nVoucher = vou;
+                this.Pan_cAnio = sAnio;
+                this.Per_cPeriodo = sPeriodo;
+                this.Lib_cTipoLibro = sLibro;
+                this.Emp_cCodigo = "003";
+                this.Asd_cTipoDoc = "01";
+                this.Asd_dFecDoc = sFechaSql;
+                this.Asd_cDestino = "0";
+                //Asd_cSerieDoc = cbSucursal.SelectedItem.ToString().ToUpper() == "Surco".ToUpper() ? "T005" : "T001";
+
+                this.Imp_nPorcentaje = 18;
+
+
+                this.Asd_cEstado = "A";
+                this.Asd_cUserCrea = "DPEREZ";
+                this.Asd_cUserModifica = "DPEREZ";
+                this.Asd_cEquipoUser = "CONTABILIDAD";
+
+                int i = 0;
+                foreach (var data in ComprasTotal)
+                {
+                    this.Pla_cCuentaContable = data.cuenta;
+                    this.Asd_cOperaTC =  "SCV";
+                    this.Asd_cTipoMoneda =  "038";
+                    this.Asd_nItem = i + 1;
+                    this.Asd_nDebeSoles =  data.debe;
+                    this.Asd_nHaberSoles = data.haber;
+                    this.Asd_nDebeMonExt = 0;
+                    this.Asd_cSerieDoc = "00P1";
+
+                    this.Cos_cCodigo = (data.cuenta == "40111" || data.cuenta == "42120") ? "" : "04";
+                    this.Ten_cTipoEntidad = data.cuenta == "42120" ? "P" : "";
+                    this.Ent_cCodEntidad = data.cuenta == "42120" ? data.entidad : "";
+                    this.Ecp_cOperacion =  "";
+                    this.Asd_cProvCanc =  "";
+                    this.Asd_cNumDoc = data.numero;
+                    this.Asd_cBaseImp = (data.cuenta != "42120" ) ? "006" : "";
+                    string query2 = @"spCn_GrabaAsientoDet 'INSERTAR','" + this.Ase_cNummov + "','" + this.Emp_cCodigo + "','" + this.Pan_cAnio + "','" + this.Per_cPeriodo + "','" +
+                                           this.Lib_cTipoLibro + "','" + this.Ase_nVoucher + "'," + this.Asd_nItem + ",'" + this.Pla_cCuentaContable + "','" + sGlosa + "'," +
+                                           this.Asd_nDebeSoles + "," + this.Asd_nDebeMonExt + "," + this.Asd_nHaberSoles + "," + this.Asd_nHaberMonExt + "," + this.Asd_nTipoCambio + ",'" +
+                                           this.Cos_cCodigo + "','" + this.Ten_cTipoEntidad + "','" + this.Ent_cCodEntidad + "','" + this.Asd_cTipoDoc + "','" + this.Asd_cSerieDoc + "','" +
+                                           this.Asd_cNumDoc + "','" + this.Asd_dFecDoc + "','" + this.Asd_cTipoDocRef + "','" + this.Asd_cSerieDocRef + "','" + this.Asd_cNumDocRef + "'," +
+                                           "NULL" + "," + this.Asd_nMontoInafecto + ",'" + this.Asd_cRetencion + "','" + this.Asd_cFlgSpot + "'," + "NULL" + ",'" +
+                                           this.Asd_cNumSpot + "','" + this.Asd_cDestino + "'," + this.Asd_nCorre + ",'" + this.Asd_cUserCrea + "','" + this.Asd_cEstado + "','" +
+                                           this.Asd_cProvCanc + "','" + this.Asd_cOperaTC + "','" + this.Asd_cTipoMoneda + "'," + "default" + "," + this.Imp_nPorcentaje + ",'" +
+                                           this.Asd_cAfecto + "'," + "NULL" + "," + "default" + "," + "default" + ",'" + this.Asd_cBaseImp + "','" +
+                                           this.Asd_cMonAdic + "'," + this.Asd_cImpAdic + ",'" + this.Asd_cComprobante + "','" + this.Asd_cProceso + "','" + this.Ecp_cOperacion + "','" +
+                                           this.Asd_cRegAux + "','" + this.Asd_cConvMon + "','" + this.Asd_cManual + "','" + this.Asd_cRegAuxDet + "','" + this.Asd_cGrupo + "','" +
+                                           this.Asd_cCodConcepto + "'," + "NULL" + "," + "NULL" + "," + "NULL" + "," + "NULL" + "," + "NULL";
+
+
+
+                    // +"','" +
+                    Conexion cn = new Conexion(conx);
+                    listo = cn.insertar(query2);
+                    i++;
+                }
+
+            }
+            catch (Exception e)
+            {
+                mv.Message = mv.ToStringAllExceptionDetails(e);
+                mv.Caption = "Error sql";
+                mv.mensajeria();
+
+            }
+
+        }
+
+
         private void sincronizarCobro(string sAnio, string sPeriodo, string sLibro, string sGlosa, string sFechaSql, string sTienda,
                               string iniFinFactura, string sucursal, string conx, string mov, string vou)
         {
@@ -763,18 +843,14 @@ namespace WpfApplication1
         ///// 
         public void verificarCompras(string fechaSql, string conex1, string conex2)
         {
-             decimal subTotal = 0; //cuenta x cobrar
-            decimal igv = 0; //igv
-            decimal Total = 0; // recargo al consumo
-            int cont = 0;
+            
             string[] tienda = new string[] { "001T", "006T", "007T", "008T" };
             string t = "";
             string sql = "";
             string sql1 = "";
-            string sucursal = "";
-            string facturas = "";
             string movi = "";
             string vouc = "";
+           
             VerificaGlosa vg = new VerificaGlosa(); // objeto de clase de vericacion de glosa
             MessageViewModel mc = new MessageViewModel(); // objeto de la clase mensajes
            
@@ -785,14 +861,21 @@ namespace WpfApplication1
                         
                 //consulta que saca la informacion de ventas
                     Conexion cn = new Conexion(conex1);
-                    sql = @"select a.NUMALBARAN,p.entidad, ac.serie_doc as serie,count(a.NUMALBARAN) cantFac,(a.TOTALIMPUESTOS) igv,MAX(a.TOTALNETO) neto
-                        from ALBCOMPRACAB as a inner join ALBCOMPRALIN as b on a.NUMALBARAN = b.NUMALBARAN and a.NUMSERIE = b.NUMSERIE
+                    sql = @"select a.NUMALBARAN,
+                            case  when p.entidad IS NULL  then '99999' else p.entidad end as entidad, 
+                            case when ac.serie_doc IS NULL or ac.serie_doc = '' then 'err' else ac.serie_doc end as serie,
+                            case when pro.NIF20 IS NULL or pro.NIF20 = '' then 'err' else pro.NIF20 end as ruc,
+                            case when pro.NOMPROVEEDOR IS NULL or pro.NOMPROVEEDOR = '' then 'err' else pro.NOMPROVEEDOR end as proveedor,
+                            case when a.sualbaran IS NULL or sualbaran = '' then 'err' else a.sualbaran end as SUALBARAN,
+                            count(a.NUMALBARAN) cantFac,MAX(a.TOTALIMPUESTOS) igv,MAX(a.TOTALNETO) neto
+                             from ALBCOMPRACAB as a inner join ALBCOMPRALIN as b on a.NUMALBARAN = b.NUMALBARAN and a.NUMSERIE = b.NUMSERIE
                              inner join ALBCOMPRACAMPOSLIBRES AS AC ON ac.NUMALBARAN = A.NUMALBARAN AND AC.NUMSERIE = A.NUMSERIE
+                             inner join PROVEEDORES AS pro on a.CODPROVEEDOR = pro.CODPROVEEDOR
                              inner join PROVEEDORESCAMPOSLIBRES as p on a.CODPROVEEDOR = p.CODPROVEEDOR 
 	                         inner join articulos as c on c.CODARTICULO = b.CODARTICULO
 	                         inner join secciones as s on c.SECCION = s.NUMSECCION
-                        where a.FECHAALBARAN = '20180122' and a.NUMSERIE = '4C' and upcase(ac.tipo_documentop) = 'F'
-                        group by a.NUMALBARAN, p.ENTIDAD, ac.serie_doc ";
+                        where a.FECHAALBARAN = '" + fechaSql +"' and a.NUMSERIE = '4C' "+   
+                        "group by a.NUMALBARAN, p.ENTIDAD, ac.serie_doc, pro.NIF20, pro.NOMPROVEEDOR,a.SUALBARAN ";
                     
                
 
@@ -801,31 +884,43 @@ namespace WpfApplication1
                     {
                         while (reader.Read())
                         {
-                             sql1 = @"select a.NUMALBARAN as factura,s.CENTROCOSTE as cuenta, sum(b.total) sub_total
+                            Conexion cn2 = new Conexion(conex1); 
+                            sql1 = @"select a.NUMALBARAN as factura,s.CENTROCOSTE as cuenta, sum(b.total) sub_total
                                 from ALBCOMPRACAB as a inner join ALBCOMPRALIN as b on a.NUMALBARAN = b.NUMALBARAN and a.NUMSERIE = b.NUMSERIE
                                      inner join ALBCOMPRACAMPOSLIBRES AS AC ON ac.NUMALBARAN = A.NUMALBARAN AND AC.NUMSERIE = A.NUMSERIE
                                      inner join PROVEEDORESCAMPOSLIBRES as p on a.CODPROVEEDOR = p.CODPROVEEDOR 
 	                                 inner join articulos as c on c.CODARTICULO = b.CODARTICULO
 	                                 inner join secciones as s on c.SECCION = s.NUMSECCION
-                                where a.FECHAALBARAN = '20180122' and a.NUMSERIE = '4C' and a.NUMALBARAN = " + reader.GetString(0) + " and upcase(ac.tipo_documentop) = 'F'"+
+                                where a.FECHAALBARAN = '" + fechaSql + "' and a.NUMSERIE = '4C' and a.NUMALBARAN = " + reader.GetValue(0).ToString() + 
                                 " group by a.NUMALBARAN,s.CENTROCOSTE";
                            
-                            SqlDataReader reader2 = cn.consulta3(sql1);
-                           
+                            SqlDataReader reader2 = cn2.consulta3(sql1);
+                            
                             if (reader2.HasRows)
                             {
                                 while (reader2.Read())
                                 {
-                                    ComprasTotal.Add(new mCompras(reader2.GetString(1), reader.GetString(1), reader2.GetString(0), Convert.ToDecimal(reader2.GetValue(2)), 0, reader.GetString(2)));
+                                   // en el ultimo campo hay que poner la serie
+                                    ComprasTotal.Add(new mCompras(reader2.GetString(1), reader.GetString(1), reader.GetValue(0).ToString(), Convert.ToDecimal(reader2.GetValue(2)), 0, ""));
                                 }
                             }
-                            ComprasTotal.Add(new mCompras("40111", reader.GetString(1), reader.GetString(0), Convert.ToDecimal(reader.GetValue(5)), 0, reader.GetString(2)));
-                            ComprasTotal.Add(new mCompras("42121", reader.GetString(1), reader.GetString(0), 0,Convert.ToDecimal(reader.GetValue(5)), reader.GetString(2)));
+                            // en el ultimo campo hay que poner la serie
+                            ComprasTotal.Add(new mCompras("40111", reader.GetString(1), reader.GetValue(0).ToString(), Convert.ToDecimal(reader.GetValue(7)), 0, ""));
+                            ComprasTotal.Add(new mCompras("42120", reader.GetString(1), reader.GetValue(0).ToString(), 0, Convert.ToDecimal(reader.GetValue(8)), ""));
                            
+                            vg.Anio = fecha.Year.ToString();
+                            vg.Periodo = fecha.ToString("MM");
+                            vg.Libro = "06";
+                            vg.Glosa = "COMPRAS: " + "Nro. " + reader.GetString(5) + " Proveedor: " + reader.GetString(1) + " " + reader.GetString(3) + " " + reader.GetString(4);
+
+                            crearCabecera(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, conex2, fecha.ToString("dd-MM-yyyy"), ref movi, ref vouc, 0);
+                            sincronizarCompra(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, "", "", t, conex2, movi, vouc);
+                            ComprasTotal.Clear();
+                            cn2.Cerrar();
                         }
 
                     }
-
+                    cn.Cerrar();
             }
             catch (Exception e)
             {

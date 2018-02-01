@@ -35,7 +35,7 @@ namespace WpfApplication1
         ObservableCollection<mVentas> venta = new ObservableCollection<mVentas>();
         string con = "Server=PASTELAMORA; Database=BD1; User Id=jdhades; Password = P4nt3r4--";
         public string con2 = @"Server=CONTABILIDAD\SQLEXPRESS; Database=SAFC_ECB; User Id=user; Password = user";
-        //string con2 = @"Server=LAYER-PC\TTEST; Database=SAFC_ECB; User Id=profit; Password = profit";
+       // string con2 = @"Server=LAYER-PC\TTEST; Database=SAFC_ECB; User Id=profit; Password = profit";
        
         public menu()
         {
@@ -290,8 +290,8 @@ namespace WpfApplication1
          {
              Integracion ni = new Integracion();
             
-             DateTime inicio = DateTime.Parse(dpFechaIni.Text);
-             DateTime final = DateTime.Parse(dpFechaFin.Text);
+             DateTime inicio = DateTime.Parse(dppFechaIni.Text);
+             DateTime final = DateTime.Parse(dppFechaFin.Text);
              TimeSpan dias = final - inicio;
              
              // HAY QUE CAMBIAR TODA ESTA VERGA PARA REDUCIR CODIGO
