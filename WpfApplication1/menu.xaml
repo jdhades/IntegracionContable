@@ -3,24 +3,46 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:WpfApplication1" x:Name="principal"
+        xmlns:circularProgressBar="clr-namespace:circularProgressBar;assembly=circularProgressBar"
+        xmlns:rv="clr-namespace:Microsoft.Reporting.WinForms;assembly=Microsoft.ReportViewer.WinForms"
         x:Class="WpfApplication1.menu"
-        Title="IntegraConta" Background="Gainsboro" Height="550" Width="424" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" IsMaxRestoreButtonEnabled="False" ShowMaxRestoreButton="False">
+        Title="IntegraConta" 
+        Background="Gainsboro" 
+        Height="550" Width="424" 
+        WindowStartupLocation="CenterScreen" 
+     
+    IsMaxRestoreButtonEnabled="True" 
+        ShowMaxRestoreButton="False" 
+        Closed="principal_Closed" 
+        Closing="principal_Closing" 
+        WindowStyle="ToolWindow" 
+        Icon="chat_1_.ico" 
+        ShowMinButton="True" ResizeMode="CanMinimize"
+        >
 
 
-    <Canvas Margin="0,0,574,0">
-        <Controls:Tile x:Name="btnVentas" Margin="0" Width="172" Height="174" Title="Ventas" TitleFontSize="16" Canvas.Left="40" Canvas.Top="94" Click="btnVentas_Click" >
-            <Image Source="Imagenes/img_ventas.png" Width="148" Height="122"/>
+
+    <Canvas Margin="0,0,574,0" >
+        <Controls:Tile x:Name="btnVentas" Margin="0" Width="124" Height="111" Title="Ventas"  HorizontalTitleAlignment="Center" TitleFontSize="16" Canvas.Left="76" Canvas.Top="48" Click="btnVentas_Click" >
+            <Image Source="Imagenes/img_ventas.png" Width="100" Height="80"/>
         </Controls:Tile>
-        <Controls:Tile x:Name="btnCompras"  Margin="0" Width="172" Height="174" Title="Compras" TitleFontSize="16" Background="#CCA20025" Canvas.Left="40" Canvas.Top="274" Click="btnCompras_Click" >
-            <Image Source="imagenes/img_compras.png" Width="148" Height="122"/>
+        <Controls:Tile x:Name="btnCompras"  Margin="0" Width="124" Height="111" Title="Compras"  HorizontalTitleAlignment="Center" TitleFontSize="16" Background="#CCA20025" Canvas.Left="76" Canvas.Top="179" Click="btnCompras_Click" >
+            <Image Source="imagenes/img_compras.png" Width="100" Height="80"/>
         </Controls:Tile>
-        <Controls:Tile x:Name="btnCobros" Margin="0" Width="172" Height="174" Title="Cobros" TitleFontSize="16" Background="#CCA20025" Canvas.Left="217" Canvas.Top="94" Click="btnCobros_Click" >
-               <Image Source="imagenes/img_cobros.png" Width="148" Height="122"/>
+        <Controls:Tile x:Name="btnCobros"  Margin="0" Width="124" Height="111" Title="Cobros"  HorizontalTitleAlignment="Center" TitleFontSize="16" Background="#CCA20025" Canvas.Left="220" Canvas.Top="48" Click="btnCobros_Click" >
+            <Image Source="imagenes/img_cobros.png" Width="100" Height="80"/>
         </Controls:Tile>
-        <Controls:Tile Margin="0" Width="Auto" Height="174" Title="Usuarios" TitleFontSize="16" Background="#CCA20025" Canvas.Left="217" Canvas.Top="274" >
-            <Image Source="imagenes/img_user.png" Width="172" Height="149"/>
+        <Controls:Tile  x:Name="btnEliminar" Margin="0" Width="124" Height="111"  Title="Eliminar"  HorizontalTitleAlignment="Center"  TitleFontSize="16" Background="#CCA20025" Canvas.Left="76" Canvas.Top="312" Click="btnEliminar_Click" >
+            <Image Source="imagenes/img_delete.png" Width="100" Height="80"/>
+        </Controls:Tile>
+        <Controls:Tile x:Name="btnCompras_Tienda"  Margin="0" Width="124" Height="111" Title="C.Tiendas"  HorizontalTitleAlignment="Center" TitleFontSize="16" Background="#CCA20025" Canvas.Left="221" Canvas.Top="179" Click="btnCompras_Tienda_Click"  >
+            <Image Source="imagenes/img_compras.png" Width="100" Height="80"/>
+        </Controls:Tile>
+        <Controls:Tile  x:Name="btnGastos" Margin="0" Width="124" Height="111"  Title="Gastos"   HorizontalTitleAlignment="Center" TitleFontSize="16" Background="#CCA20025" Canvas.Left="221" Canvas.Top="312" Click="btnGastos_Click"  >
+            <Image Source="imagenes/img_gastos.png" Width="100"  Height="80"/>
         </Controls:Tile>
         <Canvas Height="522" Canvas.Left="424" Width="600"/>
 
@@ -59,12 +81,12 @@
             Position="Right" 
             Foreground="White" 
             ClosingFinished="flyCompras_ClosingFinished">
-            
+
             <Canvas>
                 <DatePicker x:Name="dpcFechaIni" Canvas.Left="10" Canvas.Top="11" RenderTransformOrigin="0.45,0.115" Controls:TextBoxHelper.Watermark="Fecha Inicio"/>
                 <DatePicker x:Name="dpcFechaFin" Canvas.Left="136" Canvas.Top="11" Controls:TextBoxHelper.Watermark="Fecha Fin"/>
                 <ComboBox x:Name="cmbcFecha" Canvas.Left="268" Canvas.Top="11" Width="213" ItemsSource="{Binding Path= ListaMostrar}" SelectionChanged="cmbFecha_SelectionChanged"/>
-                <Button x:Name="btncSincronizar" Content="Sincronizar" Width="98" Canvas.Left="492" Canvas.Top="10" Click="btncSincronizar_Click" />
+                <Button x:Name="btncSincronizar"  Content="Sincronizar" Width="98" Canvas.Left="492" Canvas.Top="10" Click="btncSincronizar_Click" />
                 <GroupBox Canvas.Left="10" Margin="0" Canvas.Top="41" Width="580" Height="61" Header="TIENDAS">
                     <Canvas>
                         <RadioButton x:Name="rbcMiraflores" Canvas.Top="3" Canvas.Left="26" Content="Miraflores" Foreground="White"  IsChecked="True" Background="White" Controls:ControlsHelper.FocusBorderBrush="#FFF3FF00"/>
@@ -89,9 +111,133 @@
                 <DatePicker x:Name="dppFechaIni" Canvas.Left="10" Canvas.Top="11" RenderTransformOrigin="0.45,0.115" Controls:TextBoxHelper.Watermark="Fecha Inicio"/>
                 <DatePicker x:Name="dppFechaFin" Canvas.Left="136" Canvas.Top="11" Controls:TextBoxHelper.Watermark="Fecha Fin"/>
                 <Button x:Name="btnpSincronizar" Content="Sincronizar" Width="98" Canvas.Left="492" Canvas.Top="10" Click="btnpSincronizar_Click"  />
-              
+
             </Canvas>
         </Controls:Flyout>
+
+
+        <Controls:Flyout x:Name="flyEliminar" Canvas.Left="424" Height="522" Width="600" Header="Eliminar" Position="Right" Foreground="White" ClosingFinished="flyEliminar_ClosingFinished">
+            <Controls:Flyout.Background>
+                <SolidColorBrush Color="#FF020202" Opacity="0.8"/>
+            </Controls:Flyout.Background>
+
+            <Canvas>
+                <ComboBox x:Name="cbPeriodo" Controls:TextBoxHelper.Watermark="Periodo" Canvas.Left="296" Canvas.Top="10" Width="117" Initialized="cbPeriodo_Initialized"/>
+                <ComboBox x:Name="cbLibro" Controls:TextBoxHelper.Watermark="Libro" Canvas.Left="426" Canvas.Top="10" Width="156">
+                    <ComboBoxItem Content="02 - Caja Ingresos"/>
+                    <ComboBoxItem Content="03 - Diario"/>
+                    <ComboBoxItem Content="04 - Caja Egresos"/>
+                    <ComboBoxItem Content="05 - Registro de Ventas o Ingreso"/>
+                    <ComboBoxItem Content="06 - Registro de Compras"/>
+
+
+                </ComboBox>
+                <TextBox x:Name="vDesde" Height="23" Canvas.Left="10" TextWrapping="Wrap" Canvas.Top="10" Width="97" Controls:TextBoxHelper.Watermark="Voucher Desde" ToolTip="Voucher Desde"/>
+                <TextBox x:Name="vHasta" Height="23" Canvas.Left="118" TextWrapping="Wrap" Canvas.Top="10" Width="98" ToolTip="Voucher Hasta" Controls:TextBoxHelper.Watermark="Voucher Hasta"/>
+                <TextBox x:Name="vYear" Height="23" Canvas.Left="230" TextWrapping="Wrap" Canvas.Top="10" Width="52" ToolTip="Año" Controls:TextBoxHelper.Watermark="Año"/>
+                <Button Content="Generar" Canvas.Left="10" Canvas.Top="51" Width="75" Click="Button_Click"/>
+                <DataGrid AlternatingRowBackground="#FFC4B0B0" Canvas.Left="10" Canvas.Top="107" Height="330" Width="580" AutoGenerateColumns="False" Name="dgEliminar" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding vyear}" Width="50" Header="Año"/>
+                        <DataGridTextColumn Binding="{Binding Periodo}" Width="80" Header="Periodo"/>
+                        <DataGridTextColumn Binding="{Binding libro}" Width="80" Header="Libro" />
+                        <DataGridTextColumn Binding="{Binding asiento}" Width="80" Header="Asiento"/>
+                        <DataGridTextColumn Binding="{Binding fecha}" Width="80" Header="Fecha"/>
+                        <DataGridTextColumn Binding="{Binding glosa}" Width="200" Header="Glosa"/>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Border BorderBrush="White" BorderThickness="1" Height="3" Canvas.Left="11" Canvas.Top="81" Width="579" Background="White"/>
+                <Button  Content="Eliminar"  Canvas.Left="90" Canvas.Top="51" Width="75" Click="eliminar_Click" Name="eliminar" IsEnabled="False"/>
+
+
+
+            </Canvas>
+        </Controls:Flyout>
+        <Controls:Flyout x:Name="flyGastos" Canvas.Left="424" Height="522" Width="600" Header="Integrar Gastos" Position="Right" Foreground="White" ClosingFinished="flyPayment_ClosingFinished">
+            <Controls:Flyout.Background>
+                <SolidColorBrush Color="#FF020202" Opacity="0.8"/>
+            </Controls:Flyout.Background>
+
+            <Canvas>
+                <DatePicker x:Name="gFechaIni" Canvas.Left="10" Canvas.Top="11" RenderTransformOrigin="0.45,0.115" Controls:TextBoxHelper.Watermark="Fecha Inicio"/>
+                <DatePicker x:Name="gFechaFin" Canvas.Left="136" Canvas.Top="11" Controls:TextBoxHelper.Watermark="Fecha Fin"/>
+                <Button x:Name="btnGastosSincronizar" Content="Sincronizar" Width="98" Canvas.Left="492" Canvas.Top="10" Click="btnGastosSincronizar_Click"   />
+
+            </Canvas>
+        </Controls:Flyout>
+        <Controls:Flyout x:Name="flyReportesVentas" Canvas.Left="424" Height="522" Width="600" Header="Reporte de Venta" Position="Right" Foreground="White" >
+            <Controls:Flyout.Background>
+                <SolidColorBrush Color="#FF020202" Opacity="0.8"/>
+            </Controls:Flyout.Background>
+
+            <Canvas>
+                <DatePicker x:Name="rVentasFechaIni" Canvas.Left="10" Canvas.Top="11" RenderTransformOrigin="0.45,0.115" FontSize="10" Controls:TextBoxHelper.Watermark="Fecha Inicio"/>
+                <DatePicker x:Name="rVentasFechaFin" Canvas.Left="136" Canvas.Top="11" FontSize="10" Controls:TextBoxHelper.Watermark="Fecha Fin"/>
+                <ComboBox x:Name="cbTienda" FontSize="10" Controls:TextBoxHelper.Watermark="Tienda" Canvas.Left="262" Canvas.Top="10" Width="156" Height="27">
+                    <ComboBoxItem Content="TODAS"/>
+                    <ComboBoxItem Content="MIRAFLORES"/>
+                    <ComboBoxItem Content="SURCO"/>
+                    <ComboBoxItem Content="SAN ISIDRO"/>
+                </ComboBox>
+                <WindowsFormsHost Height="376" Canvas.Left="10" Canvas.Top="61" Width="580">
+                    <rv:ReportViewer x:Name="rvVentasConta" />
+                </WindowsFormsHost>
+                <Button x:Name="btnReporteVenta" Content="Ejecutar" Canvas.Left="445" Canvas.Top="11" Width="86" Height="26" Click="btnReporteVenta_Click"/>
+
+            </Canvas>
+        </Controls:Flyout>
+        <Controls:Flyout x:Name="flyReportesFormasPago" Canvas.Left="424" Height="522" Width="600" Header="Reporte x Formas de Pago" Position="Right" Foreground="White" >
+            <Controls:Flyout.Background>
+                <SolidColorBrush Color="#FF020202" Opacity="0.8"/>
+            </Controls:Flyout.Background>
+
+            <Canvas Height="454">
+                <DatePicker x:Name="rFpFechaIni" Canvas.Top="11" RenderTransformOrigin="0.45,0.115" Controls:TextBoxHelper.Watermark="Fecha Inicio" Canvas.Left="5" Width="116" FontSize="10"/>
+                <DatePicker x:Name="rFpFechaFin" Canvas.Left="139" Canvas.Top="11" Controls:TextBoxHelper.Watermark="Fecha Fin" Width="116" FontSize="10"/>
+                <ComboBox x:Name="cbReporteFpTienda" Controls:TextBoxHelper.Watermark="Forma de Pago" Canvas.Left="270" Canvas.Top="10" Width="121" Height="27" Initialized="cbReporteFpTienda_Initialized"
+                          ItemsSource="{Binding}" FontSize="10"                                                
+                          >
+                </ComboBox>
+                <ComboBox x:Name="cbReporteTienda" Controls:TextBoxHelper.Watermark="Tienda" Canvas.Left="408" Canvas.Top="10" Width="100" Height="27" FontSize="10">
+                    <ComboBoxItem Content="MIRAFLORES"/>
+                    <ComboBoxItem Content="SURCO"/>
+                    <ComboBoxItem Content="SAN ISIDRO"/>
+                </ComboBox>
+
+                <WindowsFormsHost Height="376" Canvas.Left="10" Canvas.Top="61" Width="580">
+                    <rv:ReportViewer x:Name="rvFormaPago" />
+                </WindowsFormsHost>
+                <Button x:Name="btnReporteFormaPago" Content="Generar"
+                        
+                        Canvas.Left="522" Canvas.Top="11" Width="73" Height="26" Click="btnReporteFormaPago_Click"
+                        
+                        />
+
+            </Canvas>
+        </Controls:Flyout>
+        <Menu Height="28" Width="424" Background="#FF020202"  Opacity="0.8">
+            <MenuItem x:Name="mItemReportes" Header="Reportes" Background="#FF020202"  Opacity="0.8" Foreground="White" FontSize="11">
+                <MenuItem x:Name="mItemContabilidad" Header="Contabilidad" Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" Foreground="Black" FontWeight="Bold"  OpacityMask="#FF858282">
+                    <MenuItem x:Name="mItemVentas" Header="Ventas" Click="mItemVentas_Click" Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" Foreground="Black"/>
+                </MenuItem>
+                <MenuItem x:Name="mItemRptFormaPago" Header="Tesoreria" Click="mItemRptFormaPago_Click" Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" Foreground="Black" FontWeight="Bold">
+                    <MenuItem Header="RPT FORMA DE PAGO" Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" Foreground="Black"/>
+                </MenuItem>
+            </MenuItem>
+
+        </Menu>
+        <StatusBar Name="SBar" Height="39" Canvas.Top="478" Width="424">
+            <StatusBar.Background>
+                <SolidColorBrush Color="Black" Opacity="0.8"/>
+            </StatusBar.Background>
+            <StatusBarItem  >
+                <TextBlock>Status:</TextBlock>
+            </StatusBarItem>
+
+        </StatusBar>
+
     </Canvas>
+
 
 </Controls:MetroWindow>

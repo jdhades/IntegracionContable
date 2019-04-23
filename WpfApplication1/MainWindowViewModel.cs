@@ -65,7 +65,9 @@ namespace WpfApplication1
             }
             catch (Exception e)
             {
-             //   ms.mensajeria(ms.ToStringAllExceptionDetails(e), "Error sql");
+                ms.Message = ms.ToStringAllExceptionDetails(e);
+                ms.Caption = "Error sql";
+                ms.mensajeria();
                 
             }
             

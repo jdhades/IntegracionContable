@@ -8,11 +8,14 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		integraMora|Any CPU = integraMora|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{28AAC477-A645-4DF5-859E-9362C72CEA07}.Debug|Any CPU.ActiveCfg = Release|Any CPU
 		{28AAC477-A645-4DF5-859E-9362C72CEA07}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{28AAC477-A645-4DF5-859E-9362C72CEA07}.integraMora|Any CPU.ActiveCfg = Release|Any CPU
+		{28AAC477-A645-4DF5-859E-9362C72CEA07}.integraMora|Any CPU.Build.0 = Release|Any CPU
 		{28AAC477-A645-4DF5-859E-9362C72CEA07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28AAC477-A645-4DF5-859E-9362C72CEA07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

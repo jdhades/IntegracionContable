@@ -31,6 +31,8 @@ namespace WpfApplication1.message
             }
             catch (Exception e)
             {
+                ToStringAllExceptionDetails(e);
+                
                 
             }
         }

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSet2" targetNamespace="http://tempuri.org/DataSet2.xsd" xmlns:mstns="http://tempuri.org/DataSet2.xsd" xmlns="http://tempuri.org/DataSet2.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSet2" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSet2" msprop:Generator_UserDSName="DataSet2">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="OWN_RPT_VENTAS_FORMAS_PAGO" msprop:Generator_TableClassName="OWN_RPT_VENTAS_FORMAS_PAGODataTable" msprop:Generator_TableVarName="tableOWN_RPT_VENTAS_FORMAS_PAGO" msprop:Generator_TablePropName="OWN_RPT_VENTAS_FORMAS_PAGO" msprop:Generator_RowDeletingName="OWN_RPT_VENTAS_FORMAS_PAGORowDeleting" msprop:Generator_RowChangingName="OWN_RPT_VENTAS_FORMAS_PAGORowChanging" msprop:Generator_RowEvHandlerName="OWN_RPT_VENTAS_FORMAS_PAGORowChangeEventHandler" msprop:Generator_RowDeletedName="OWN_RPT_VENTAS_FORMAS_PAGORowDeleted" msprop:Generator_UserTableName="OWN_RPT_VENTAS_FORMAS_PAGO" msprop:Generator_RowChangedName="OWN_RPT_VENTAS_FORMAS_PAGORowChanged" msprop:Generator_RowEvArgName="OWN_RPT_VENTAS_FORMAS_PAGORowChangeEvent" msprop:Generator_RowClassName="OWN_RPT_VENTAS_FORMAS_PAGORow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="F_PAGO" msprop:Generator_ColumnVarNameInTable="columnF_PAGO" msprop:Generator_ColumnPropNameInRow="F_PAGO" msprop:Generator_ColumnPropNameInTable="F_PAGOColumn" msprop:Generator_UserColumnName="F_PAGO" type="xs:string" minOccurs="0" />
+              <xs:element name="TIENDA" msprop:Generator_ColumnVarNameInTable="columnTIENDA" msprop:Generator_ColumnPropNameInRow="TIENDA" msprop:Generator_ColumnPropNameInTable="TIENDAColumn" msprop:Generator_UserColumnName="TIENDA" type="xs:string" minOccurs="0" />
+              <xs:element name="RUC" msprop:Generator_ColumnVarNameInTable="columnRUC" msprop:Generator_ColumnPropNameInRow="RUC" msprop:Generator_ColumnPropNameInTable="RUCColumn" msprop:Generator_UserColumnName="RUC" type="xs:string" minOccurs="0" />
+              <xs:element name="CLIENTE" msprop:Generator_ColumnVarNameInTable="columnCLIENTE" msprop:Generator_ColumnPropNameInRow="CLIENTE" msprop:Generator_ColumnPropNameInTable="CLIENTEColumn" msprop:Generator_UserColumnName="CLIENTE" type="xs:string" minOccurs="0" />
+              <xs:element name="FECHA" msprop:Generator_ColumnVarNameInTable="columnFECHA" msprop:Generator_ColumnPropNameInRow="FECHA" msprop:Generator_ColumnPropNameInTable="FECHAColumn" msprop:Generator_UserColumnName="FECHA" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="SERIE" msprop:Generator_ColumnVarNameInTable="columnSERIE" msprop:Generator_ColumnPropNameInRow="SERIE" msprop:Generator_ColumnPropNameInTable="SERIEColumn" msprop:Generator_UserColumnName="SERIE" type="xs:string" minOccurs="0" />
+              <xs:element name="FACTURA" msprop:Generator_ColumnVarNameInTable="columnFACTURA" msprop:Generator_ColumnPropNameInRow="FACTURA" msprop:Generator_ColumnPropNameInTable="FACTURAColumn" msprop:Generator_UserColumnName="FACTURA" type="xs:string" minOccurs="0" />
+              <xs:element name="TOTAL" msprop:Generator_ColumnVarNameInTable="columnTOTAL" msprop:Generator_ColumnPropNameInRow="TOTAL" msprop:Generator_ColumnPropNameInTable="TOTALColumn" msprop:Generator_UserColumnName="TOTAL" type="xs:double" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -8,7 +8,7 @@ namespace WpfApplication1.Model
 {
     class mCompras
     {
-        public mCompras(string account, string ente, string number, decimal due, decimal have, string tipo_doc)
+        public mCompras(string account, string ente, string number, decimal due, decimal have, string tipo_doc, string centroCosto)
         {
             cuenta = account;
             entidad = ente;
@@ -16,6 +16,7 @@ namespace WpfApplication1.Model
             debe = due;
             haber = have;
             serie_doc = tipo_doc;
+            cCosto = centroCosto;
            
         }
 
@@ -25,6 +26,7 @@ namespace WpfApplication1.Model
         public decimal debe { get; set; }
         public decimal haber { get; set; }
         public string serie_doc { get; set; }
+        public string cCosto { get; set; }
        
 
     }

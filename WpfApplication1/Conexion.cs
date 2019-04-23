@@ -58,6 +58,7 @@ namespace WpfApplication1
             con.Open();
             
             comando = new SqlCommand(sql, con);
+            comando.CommandTimeout = 240;
             int i = comando.ExecuteNonQuery();
             con.Close();
             if (i > 0)
@@ -120,6 +121,7 @@ namespace WpfApplication1
         {
             con.Open();
             comando = new SqlCommand(sql, con);
+            comando.CommandTimeout = 240;
             Int32 i = (Int32) comando.ExecuteScalar();
             con.Close();
                 return i;
@@ -130,6 +132,7 @@ namespace WpfApplication1
         {
             con.Open();
             comando = new SqlCommand(sql, con);
+            comando.CommandTimeout = 240;
             SqlDataReader lector = comando.ExecuteReader();
             //con.Close();
             return lector;
