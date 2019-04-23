@@ -42,10 +42,7 @@ namespace WpfApplication1
 
         
         ObservableCollection<mVentas> venta = new ObservableCollection<mVentas>();
-        string con = "Server=192.168.1.250; Database=BD1; User Id=jdhades; Password = P4nt3r4--";
-        public string con2 = @"Server=CONTABILIDAD\SQLEXPRESS; Database=SAFC_ECB; User Id=user; Password = user";
-        public string con3 = @"Server=CONTABILIDAD\SQLEXPRESS; Database=master; User Id=user; Password = user";
-      //  string con2 = @"Server=LAYER-PC\TTEST; Database=SAFC_ECB; User Id=profit; Password = profit";
+        
        
         
         public menu()
