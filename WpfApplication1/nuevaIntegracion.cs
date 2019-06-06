@@ -712,7 +712,7 @@ namespace WpfApplication1
 
             DateTime fecha = DateTime.ParseExact(fechaSql, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
-            for (int i = 3; i < 4; i++)
+            for (int i = 1; i < 4; i++)
              {
 
              
