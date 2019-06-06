@@ -89,6 +89,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -115,6 +116,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ConexionBaseDatos.xaml.cs">
+      <DependentUpon>ConexionBaseDatos.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DataSet1.cs">
       <DependentUpon>DataSet1.xsd</DependentUpon>
       <SubType>Component</SubType>
@@ -129,9 +133,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataSet2.xsd</DependentUpon>
     </Compile>
-    <Compile Include="IntegrarVentas.cs" />
-    <Compile Include="MainWindowsViewModel.cs" />
-    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="message\MessageViewModel.cs" />
     <Compile Include="Model\mGastos.cs" />
     <Compile Include="Model\mCompras.cs" />
@@ -139,25 +140,17 @@
     <Compile Include="Model\MostrarLista.cs" />
     <Compile Include="Model\mVentas.cs" />
     <Compile Include="nuevaIntegracion.cs" />
-    <Compile Include="ObservableCollection.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="VerificaGlosa.cs" />
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Conexion.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Page Include="ConexionBaseDatos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="menu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,10 +162,6 @@
     <Page Include="Resources\IconsNonShared.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Window1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +209,7 @@
     <None Include="DataSet2.xss">
       <DependentUpon>DataSet2.xsd</DependentUpon>
     </None>
+    <None Include="DBConnectionString.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

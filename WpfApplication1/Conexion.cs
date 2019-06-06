@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.Common;
+using System.Windows.Forms;
+using System.Configuration;
 
 namespace WpfApplication1
 {
@@ -19,6 +21,129 @@ namespace WpfApplication1
        
         public string Cadena { get; set; }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+         private static string nCon;
+        internal static string providerName;
+
+        public static string GetConexion()
+        {
+            try
+            {
+                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                ConnectionStringSettings cs = config.ConnectionStrings.ConnectionStrings["default"];
+
+                if (cs == null)
+                    throw new ArgumentNullException("nameConnectionString", "El nombre de la cadena de conexión no existe" + " en el archivo de configuración de la aplicación.");
+
+                nCon = cs.ConnectionString;
+                if ((nCon == string.Empty))
+                    throw new ArgumentNullException("nameConnectionString", "No existe la cadena de conexion en el valor" + " con nombre especificado.");
+                //nCon = String.Empty
+
+                providerName = cs.ProviderName;
+                if (providerName == string.Empty)
+                    throw new ArgumentNullException("nameConnectionString", "El proveedor .net especificado" + " actualmente no se encuentra soportado.");
+                return string.Empty;
+
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return ex.Message;
+                //Throw ex
+                nCon = "";
+            }
+        }
+
+        public static SqlConnection Conectar()
+        {
+
+            SqlConnection cnMDB = new SqlConnection();
+            if (string.IsNullOrEmpty(nCon))
+                GetConexion();
+            if (nCon != null)
+            {
+                try
+                {
+                    cnMDB.ConnectionString = nCon;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+            }
+            return cnMDB;
+
+        }
+
+        public static void BuilConnectionString(string DataSource, string InitialCatalog, string UserId, string Password)
+        {
+	        // Obtenemos el archivo de configuración de la aplicación.
+	        //
+	        Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+	        // Obtenemos la sección connectionStrings.
+	        //
+	        ConnectionStringsSection section = config.ConnectionStrings;
+
+	        // Obtenemos el objeto ConnectionStringSettings
+	        // correspondiente al nombre de la cadena de
+	        // conexión especificada.
+
+            ConnectionStringSettings settings = section.ConnectionStrings["default"];
+
+            //if ((settings == null))
+            //    return;
+
+
+	        // Creamos el objeto
+	        DbConnectionStringBuilder builder = new DbConnectionStringBuilder();
+
+	        // Le asignamos el valor de la cadena de conexión
+            builder.ConnectionString = settings.ConnectionString;
+
+	        builder["Data Source"] = DataSource;
+	        builder["Initial Catalog"] = InitialCatalog;
+	        builder["User Id"] = UserId;
+	        builder["Password"] = Password;
+
+	        // Le asignamos la cadena de conexión existente  
+	        // en el objeto DbConnectionStringBuilder.  
+	        //
+            settings.ConnectionString = builder.ConnectionString;
+
+	        // Modificamos la cadena de conexión en el archivo app.config.
+	        //
+            AddAndSaveOneConnectionStringSettings(config, settings);
+
+        }
+
+        public static void AddAndSaveOneConnectionStringSettings(System.Configuration.Configuration configuration, System.Configuration.ConnectionStringSettings connectionStringSettings)
+        {
+            // You cannot add to ConfigurationManager.ConnectionStrings using
+            // ConfigurationManager.ConnectionStrings.Add
+            // (connectionStringSettings) -- This fails.
+
+            // But you can add to the configuration section and refresh the ConfigurationManager.
+
+            // Get the connection strings section; Even if it is in another file.
+            ConnectionStringsSection connectionStringsSection = configuration.ConnectionStrings;
+
+            // Add the new element to the section.
+            connectionStringsSection.ConnectionStrings.Add(connectionStringSettings);
+
+            // Save the configuration file.
+            configuration.Save(ConfigurationSaveMode.Minimal);
+
+            // This is this needed. Otherwise the connection string does not show up in
+            // ConfigurationManager
+            ConfigurationManager.RefreshSection("connectionStrings");
+        }
+       /// <summary>
+        /// //////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// </summary>
+        /// <param name="cadena"></param>
 
         public void Conectar(string cadena)
         {
@@ -139,3 +264,8 @@ namespace WpfApplication1
         }
     }
 }
+
+    
+
+
+     

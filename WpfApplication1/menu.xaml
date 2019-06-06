@@ -225,6 +225,10 @@
                     <MenuItem Header="RPT FORMA DE PAGO" Background="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" Foreground="Black"/>
                 </MenuItem>
             </MenuItem>
+            <MenuItem x:Name="conexionDB" Header="Conexion" Background="#FF020202"  Opacity="0.8" Foreground="White" FontSize="11" Click="conexionDB_Click">
+               
+            </MenuItem>
+
 
         </Menu>
         <StatusBar Name="SBar" Height="39" Canvas.Top="478" Width="424">

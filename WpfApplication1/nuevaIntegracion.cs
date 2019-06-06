@@ -212,7 +212,7 @@ namespace WpfApplication1
 
 
         private void sincronizarCobro(string sAnio, string sPeriodo, string sLibro, string sGlosa, string sFechaSql, string sTienda,
-                              string iniFinFactura, string sucursal, string conx, string mov, string vou, ref int i)
+                              string iniFinFactura, string sucursal, string conx, string mov, string vou, ref int i, string contClient, string contRuc, string direccion)
         {
 
             bool listo = false;
@@ -259,7 +259,7 @@ namespace WpfApplication1
                 
                 foreach (var data in cobroTotal)
                 {
-                    if (data.cuenta != "12121" && data.cuenta != "10111" && data.cuenta != "10112")
+                    if (data.cuenta != "12121" && data.cuenta != "10111" && data.cuenta != "10112" && data.cuenta != "12131" )
                     {
                         
                         this.Asd_cTipoDoc = "24";
@@ -290,12 +290,19 @@ namespace WpfApplication1
                     this.Asd_nDebeMonExt = data.cuenta == "10112" ? data.debe:0;
                     this.Asd_nDebeSoles = (cadena == "BC" || cadena == "FC") && data.cuenta == "12121" ? data.haber * -1 : data.cuenta == "10112" ? 0 : data.debe;
                     //this.Asd_nHaberSoles = cadena == "BC" || cadena == "FC" ? data.debe * -1 : data.haber;
-                   
+                    if (data.cuenta == "12131")
+                    {
+                        this.Asd_nHaberSoles = data.debe;
+                        //this.Asd_nDebeMonExt = data.cuenta == "10112" ? data.debe : 0;
+                        this.Asd_nDebeSoles =  data.haber;
+                    }
+                    
+                    //
                     this.Cos_cCodigo = data.cuenta == "70111" ? data.serie : "";
-                    this.Ten_cTipoEntidad = data.cuenta == "12121" ? "C" : data.cuenta == "16981" ? "T" : "";
-                    this.Ent_cCodEntidad = data.cuenta == "12121" ? "00001" : data.cuenta == "16981" ? "00046" : "";
-                    this.Ecp_cOperacion = data.cuenta == "12121"?"D":"";
-                    this.Asd_cProvCanc = data.cuenta == "12121" ? "C" : "";
+                    this.Ten_cTipoEntidad = (data.cuenta == "12121" || data.cuenta == "12131") ? "C" : data.cuenta == "16981" ? "T" : "";
+                    this.Ent_cCodEntidad = (data.cuenta == "12121" || data.cuenta == "12131") ? codigoDeEntidad(contClient, contRuc, direccion, conx) : data.cuenta == "16981" ? "00046" : "";
+                    this.Ecp_cOperacion = (data.cuenta == "12121" || data.cuenta == "12131") ? "D" : "";
+                    this.Asd_cProvCanc = (data.cuenta == "12121" || data.cuenta == "12131") ? "C" : "";
                     this.Asd_cNumDoc = data.cuenta == "10111" ? cadena2.ToString()
                                      : data.cuenta == "10112" ? cadena2.ToString()
                                      : data.cuenta == "16291" ? cadena2.ToString()
@@ -373,7 +380,7 @@ namespace WpfApplication1
             string sPorcentajeSunat = "0";
             string dataCuenta = "";
 
-            sql = @"SELECT Ent_cCodEntidad FROM CNM_ENTIDAD where Ent_nRuc = ltrim(rtrim('" + ruc + "'))";
+            sql = @"SELECT Ent_cCodEntidad FROM CNM_ENTIDAD where Ten_cTipoEntidad= 'C' and Ent_nRuc = ltrim(rtrim('" + ruc + "'))";
             Conexion consult = new Conexion(cn);
             SqlDataReader reader = consult.consulta3(sql);
             if (ruc != "")
@@ -497,9 +504,9 @@ namespace WpfApplication1
                     
                    
             
-                    // +"','" +
+                    
                     Conexion cn = new Conexion(conx);
-                 //   listo = cn.insertar(query2);
+                    listo = cn.insertar(query2);
                     i++;
                 }
                 
@@ -594,7 +601,7 @@ namespace WpfApplication1
                                            Ase_cEstado + "','" + "0" + "','" + "001" + "'," + "default" + ",'" + "1" + "','" +
                                            "" + "'," + "NULL" + "," + "NULL" + "," + "NULL" + ",'" + "0" + "','" + "0" + "'"; 
                                                               
-                      //  listo = cn.insertar(query2);
+                        listo = cn.insertar(query2);
                         cn.Cerrar();
                     }
 
@@ -630,7 +637,7 @@ namespace WpfApplication1
                                                Ase_cEstado + "','" + "0" + "','" + "001" + "'," + "default" + ",'" + "1" + "','" +
                                                "" + "'," + "NULL" + "," + "NULL" + "," + "NULL" + ",'" + "0" + "','" + "0" + "'"; 
                                           
-                         //   listo = cn.insertar(query2);
+                            listo = cn.insertar(query2);
                             cn.Cerrar();
                         }
 
@@ -672,15 +679,21 @@ namespace WpfApplication1
             decimal sumCasaAzul = 0;
             decimal sumLanve = 0;
             decimal sumInterbank = 0;
-            decimal sumGrifo = 0;
+            decimal sumCredito = 0;
 
 
             //string[] tienda = new string[] { "001T", "006T", "007T", "008T" };
-            string[, ,] tiendas = new string[4, 5, 2]  { {{"Miraflores","001T"}, {"Miraflores","B001"}, {"Miraflores","F001"}, {"Miraflores","BC01"}, {"Miraflores","FC01"}},
+           /* string[, ,] tiendas = new string[5, 5, 2]  { {{"Miraflores","001T"}, {"Miraflores","B001"}, {"Miraflores","F001"}, {"Miraflores","BC01"}, {"Miraflores","FC01"}},
+                                                       { {"Miraflores","001T"}, {"Miraflores","B006"}, {"Miraflores","F006"}, {"Miraflores","BC06"}, {"Miraflores","FC06"}},
 		                                               {  {"Surco","006T"}, {"Surco","B002"}, {"Surco","F002"}, {"Surco","BC02"}, {"Surco","FC02"}}, 
 		                                               {  {"San Isidro","007T"}, {"San Isidro","B004"}, {"San Isidro","F004"}, {"San Isidro","BC04"}, {"San Isidro","FC04"}},
-		                                               {  {"San Isidro","008T"}, {"San Isidro","B005"}, {"San Isidro","F005"}, {"San Isidro","BC05"}, {"San Isidro","FC05"}}};
+		                                               {  {"San Isidro","008T"}, {"San Isidro","B005"}, {"San Isidro","F005"}, {"San Isidro","BC05"}, {"San Isidro","FC05"}}};*/
+
+           // string[,] tiendas = new string[3, 2] { {"",""}, {"", ""}, {"",""} };
+            string[] consulta= { "sc.VENTAS_MIRAFLORES = 'T'", "sc.VENTAS_SURCO = 'T' ", "sc.VENTAS_SAN_ISIDRO = 'T' " };
+            string[] tiendas = {"MIRAFLORES","SURCO","SAN ISIDRO"};
             string t = "";
+            string serie = "";
             string sql = "";
             string sqlT = "";
             string sucursal = "";
@@ -690,69 +703,82 @@ namespace WpfApplication1
             int moneda;
             int indice = 0;
             string cadena = "";
+            string cliente = "";
+            string ruc = "";
+            string direccion = "";
             Boolean activado;
             VerificaGlosa vg = new VerificaGlosa(); // objeto de clase de vericacion de glosa
             MessageViewModel mv = new MessageViewModel(); // objeto de la clase mensajes
 
             DateTime fecha = DateTime.ParseExact(fechaSql, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
-            for (int i = 1; i < 5; i++)
+            for (int i = 3; i < 4; i++)
              {
+
+             
+                 Conexion pn = new Conexion(conex1);
+                 Conexion bn = new Conexion(conex1);
                  movi = "";
                  vouc = "";
                  
                  activado = true;
 
-                 Conexion pn = new Conexion(conex1);
+
+                 // busca las series de las tiendas
+                 sqlT = @"SELECT S.SERIE FROM SERIES S INNER JOIN SERIESCAMPOSLIBRES SC ON S.SERIE = SC.SERIE WHERE " + consulta[i-1];
+                 SqlDataReader buscaSerie = bn.consulta3(sqlT);
+                 
+                 //fin de busqueda
 
                  sqlT = @"SELECT a.numero,CASE  WHEN d.total IS NULL THEN 0 ELSE d.total END AS total,a.IMPORTE,a.CODFORMAPAGO,c.DESCRIPCION
                                     FROM VW_TESORERIA a inner join TIPOSPAGO b on a.CODTIPOPAGO = b.CODTIPOPAGO
                                     inner join FORMASPAGO c on a.CODFORMAPAGO = c.CODFORMAPAGO
                                     left join FACTURASVENTATOT d on a.NUMERO = d.NUMERO and a.serie = d.SERIE
-                                    WHERE  a.serie in ('" + tiendas[i - 1, 0, 1] + "','" + tiendas[i - 1, 1, 1] + "','"
-                                                       + tiendas[i - 1, 2, 1] + "','" + tiendas[i - 1, 3, 1] + "','"
-                                                       + tiendas[i - 1, 4, 1] + "') and FECHADOCUMENTO = '" + fechaSql + "' order by numero";
+                                    left join series s on s.SERIE = d.SERIE
+                                    inner join SERIESCAMPOSLIBRES sc on s.SERIE = sc.SERIE
+                                    WHERE " +consulta[i-1] +"  and FECHADOCUMENTO = '" + fechaSql + "' order by numero";
+
                  SqlDataReader lector = pn.consulta3(sqlT);
-             for (int j = 1; j < 6; j++) 
+
+          if(buscaSerie.HasRows)
+           {
+            try
+             {
+             while (buscaSerie.Read())
               {
+
+                serie = buscaSerie.GetValue(0).ToString();
                 cobro.Clear();
-                t = tiendas[i - 1, j - 1, 0] == "Miraflores" ? "01" : tiendas[i - 1, j - 1, 0] == "Surco" ? "02" : tiendas[i - 1, j - 1, 0] == "San Isidro" ? "05" : "05";
+                t = i == 1 ? "01" : i == 2 ? "02" : i == 3 ? "05" : "05";
                 moneda = 0;
-                cadena = tiendas[i - 1, j - 1, 1].Substring(0, 2);
-                try
-                {
+                cadena = serie.Substring(0, 2);
+               
                     
                     //consulta que saca la informacion de ventas
                     Conexion cn = new Conexion(conex1);
 
 
-                    sql = @"SELECT A.NUMFACTURA AS NUMERO,0 AS total FROM FACTURASVENTA AS A
-                        where a.FECHAENTRADA = '" + fechaSql + "' and a.NUMSERIE = '" + tiendas[i - 1, j - 1, 1]  +"' and a.TOTALNETO = 0 ";
+                    sql = @"SELECT A.NUMFACTURA AS NUMERO,0 AS total, '' as cliente, '' ruc,'' DIRECCION , '' CREDITO
+                            FROM FACTURASVENTA AS A inner join CLIENTES c on c.CODCLIENTE = a.CODCLIENTE
+                        where a.FECHAENTRADA = '" + fechaSql + "' and a.NUMSERIE = '" + serie  +"' and a.TOTALNETO = 0 ";
                     sql = sql + @" union 
-                        SELECT numero,SUM(total) 
-                        from FACTURASVENTA b  right outer join FACTURASVENTATOT a on a.NUMERO = b.NUMFACTURA and a.SERIE = b.NUMSERIE
-                        where b.FECHAENTRADA = '" + fechaSql + "' and a.SERIE = '" + tiendas[i - 1, j - 1, 1] + "' group by numero order by NUMERO";
+                        SELECT numero,SUM(total),COALESCE(NOMBRECLIENTE,'') cliente,COALESCE(NIF20,'') ruc,COALESCE(DIRECCION1,'') DIRECCION,  COALESCE(CODBANCO,'') CREDITO
+                             from FACTURASVENTA b right outer join FACTURASVENTATOT a on a.NUMERO = b.NUMFACTURA and a.SERIE = b.NUMSERIE 
+                             inner join clientes  c on c.CODCLIENTE = b.CODCLIENTE
+                        where b.FECHAENTRADA = '" + fechaSql + "' and a.SERIE = '" + serie + @"' 
+                        group by numero,NOMBRECLIENTE,NIF20, DIRECCION1,CODBANCO
+                        order by NUMERO";
 
 
-//                    sql = @"SELECT a.numero,CASE  WHEN d.total IS NULL THEN 0 ELSE d.total END AS total,a.IMPORTE,a.CODFORMAPAGO,c.DESCRIPCION
-//                                    FROM VW_TESORERIA a inner join TIPOSPAGO b on a.CODTIPOPAGO = b.CODTIPOPAGO
-//                                    inner join FORMASPAGO c on a.CODFORMAPAGO = c.CODFORMAPAGO
-//                                    left join FACTURASVENTATOT d on a.NUMERO = d.NUMERO and a.serie = d.SERIE
-//                                    WHERE  a.serie = '" + tiendas[i - 1, j - 1, 1] + "' and FECHADOCUMENTO = '" + fechaSql + "' order by numero";
-
-                    
-                    
-                   
-
-                    
+           
                     SqlDataReader reader = cn.consulta3(sql);
                     //se le asigna a cada cuenta contable el valor correpondiente de la venta, para despues realizar una agrupacion y sacar la diferencia
                     if (reader.HasRows)
                     {
                         Int32 num = 0;
 
-
-                        if (cadena != "B0" && cadena != "00")
+                        // el caso de que sea una nota de credito o una factura para que haga el detalle de cada factura y nota de credito
+                        if (cadena != "B0")
                         {
                             while (reader.Read())
                             {
@@ -761,13 +787,22 @@ namespace WpfApplication1
                                 {
                                     cobro.Add(new mCobros("12121", t, (reader.GetInt32(0)).ToString(), 0, Convert.ToDecimal(reader.GetValue(1)), "FACTURA"));
 
+                                    if (reader.GetValue(5).ToString().Trim() == "CRED" && cadena != "FC")
+                                    {
+                                        cobro.Add(new mCobros("12131", t, (reader.GetInt32(0)).ToString(),0 , Convert.ToDecimal(reader.GetValue(1)), "CREDITO"));
+                                    }
+                                   
+
                                     num = reader.GetInt32(0);
-                                    sumFactura = Math.Round(cobro.Sum(z => z.haber), 2);
-                                    //sumFacturaDol = Math.Round(cobro.Sum(z => z.cuenta == "10112" ? z.haber : 0), 2);
+                                    sumFactura = Math.Round(cobro.Sum(z => z.cuenta == "12121" ? z.haber : 0), 2);
+                                    sumCredito = Math.Round(cobro.Sum(z => z.cuenta == "12131" ? z.haber : 0), 2);
                                     sumDolares = Math.Round(cobro.Sum(z => z.cuenta == "10112" ? z.debe : 0), 2);
                                     moneda = 0;
                                     //Asignacion de resultados para crear el asiento cabecera
-                                    sucursal = tiendas[i - 1, j - 1, 0];
+                                    sucursal = tiendas[i-1];
+                                    cliente = reader.GetString(2).Trim();
+                                    ruc = reader.GetString(3).Trim();
+                                    direccion = reader.GetString(4).Trim();
                                     vg.Anio = fecha.Year.ToString();
                                     vg.Periodo = fecha.ToString("MM");
                                     vg.Libro = "02";
@@ -797,6 +832,10 @@ namespace WpfApplication1
                                             if (moneda == 1)
                                             {
                                                 cobroTotal.Add(new mCobros("12121", sucursal, facturas, 0, sumFactura, "Facturas"));
+                                                if (reader.GetValue(5).ToString().Trim() == "CRED" && cadena != "FC")
+                                                    {
+                                                        cobroTotal.Add(new mCobros("12131", sucursal, facturas,0 , sumCredito, "Credito"));
+                                                  }
 
                                                 if (activado == true)
                                                 {
@@ -804,14 +843,12 @@ namespace WpfApplication1
                                                     activado = false;
                                                     indice = 0;
                                                 }
-                                                sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, tiendas[i - 1, j - 1, 1], facturas, t, conex2, movi, vouc, ref indice);
+                                                sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, serie, facturas, t, conex2, movi, vouc, ref indice, cliente, ruc, direccion);
                                                 cobroTotal.Clear();
                                             }
                                             else
                                             {
-                                                // if (sumFacturaDol != 0)
-                                                //     cobroTotal.Add(new mCobros("12121", sucursal, facturas, 0, sumFacturaDol, "FacturasDolares"));
-                                                //if (sumDolares != 0)
+                                                
 
                                                 if (sumDolares != 0)
                                                 {
@@ -823,7 +860,7 @@ namespace WpfApplication1
                                                         activado = false;
                                                     }
 
-                                                    sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, tiendas[i - 1, j - 1, 1], facturas, t, conex2, movi, vouc, ref indice);
+                                                    sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, serie, facturas, t, conex2, movi, vouc, ref indice, cliente, ruc, direccion);
                                                     cobroTotal.Clear();
                                                 }
                                             }
@@ -836,7 +873,7 @@ namespace WpfApplication1
                         } // aqui termina el if para sacar uno por uno de facturas y notas de credito
 
 
-                        if (cadena == "B0" || cadena == "00")
+                        if (cadena == "B0" )
                         {
                             moneda = 0;
                             while (reader.Read())
@@ -850,7 +887,10 @@ namespace WpfApplication1
                             sumDolares = Math.Round(cobro.Sum(z => z.cuenta == "10112" ? z.debe : 0), 2);
 
                             //Asignacion de resultados para crear el asiento cabecera
-                            sucursal = tiendas[i - 1, j - 1, 0];
+                            cliente = "";
+                            ruc = "";
+                            direccion = "";
+                            sucursal = tiendas[i-1];
                             vg.Anio = fecha.Year.ToString();
                             vg.Periodo = fecha.ToString("MM");
                             vg.Libro = "02";
@@ -891,7 +931,7 @@ namespace WpfApplication1
                                             activado = false;
                                             indice = 0;
                                         }
-                                        sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, tiendas[i - 1, j - 1, 1], facturas, t, conex2, movi, vouc, ref indice);
+                                        sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, serie, facturas, t, conex2, movi, vouc, ref indice, cliente, ruc, direccion);
                                         cobroTotal.Clear();
                                     }
                                     else
@@ -910,7 +950,7 @@ namespace WpfApplication1
                                                 activado = false;
                                             }
 
-                                            sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, tiendas[i - 1, j - 1, 1], facturas, t, conex2, movi, vouc, ref indice);
+                                            sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, serie, facturas, t, conex2, movi, vouc, ref indice, cliente, ruc, direccion);
                                             cobroTotal.Clear();
                                         }
                                     }
@@ -920,7 +960,10 @@ namespace WpfApplication1
                             }
                         }// aqui termina el if para agrupar boletas
                     }
-                        if (lector.HasRows && j==5)
+                       
+                }
+                  buscaSerie.Close() ;
+                    if (lector.HasRows)
                         {
                             int x = 0;
                             while (lector.Read())
@@ -964,9 +1007,9 @@ namespace WpfApplication1
                                     case 11://interbank
                                         cobro.Add(new mCobros("16292", t, (lector.GetInt32(0)).ToString(), Convert.ToDecimal(lector.GetValue(2)), 0, "INTERBANK"));
                                         break;
-                                    case 16://interbank
-                                        cobro.Add(new mCobros("16300", t, (lector.GetInt32(0)).ToString(), Convert.ToDecimal(lector.GetValue(2)), 0, "GRIFOS"));
-                                        break;
+                                   // case 16://interbank
+                                     //   cobro.Add(new mCobros("16300", t, (lector.GetInt32(0)).ToString(), Convert.ToDecimal(lector.GetValue(2)), 0, "GRIFOS"));
+                                      //  break;
 
 
                                 }
@@ -984,12 +1027,15 @@ namespace WpfApplication1
                             sumCasaAzul = Math.Round(cobro.Sum(z => z.cuenta == "16297" ? z.debe : 0), 2);
                             sumLanve = Math.Round(cobro.Sum(z => z.cuenta == "16298" ? z.debe : 0), 2);
                             sumInterbank = Math.Round(cobro.Sum(z => z.cuenta == "16290" ? z.debe : 0), 2);
-                            sumGrifo = Math.Round(cobro.Sum(z => z.cuenta == "16300" ? z.debe : 0), 2);
+                        //    sumGrifo = Math.Round(cobro.Sum(z => z.cuenta == "16300" ? z.debe : 0), 2);
                             
                             sumDolares = Math.Round(cobro.Sum(z => z.cuenta == "10112" ? z.debe : 0), 2);
 
                             //Asignacion de resultados para crear el asiento cabecera
-                            sucursal = tiendas[i - 1, j - 1, 0];
+                            cliente = "";
+                            ruc = "";
+                            direccion = "";
+                            sucursal = tiendas[i-1];
                             vg.Anio = fecha.Year.ToString();
                             vg.Periodo = fecha.ToString("MM");
                             vg.Libro = "02";
@@ -997,15 +1043,7 @@ namespace WpfApplication1
                             vg.Glosa = "REG CUADRE: " + sucursal +  " Fecha: " + fecha.ToString("dd-MM-yyyy");
                             /////////////////////////////////////////
                             moneda = 0;
-
-
-
-                            // cobroTotal.Add(new mCobros("12121", sucursal, factuas, facturas, 0));
-
-                            // si hay diferencia entre la cuenta x cobrar y el total neto de la venta
-                            // llenamos el combo box con la fecha y la tienda que tiene los problemas, para que este muestre en el grid el detalle
-
-                            //verifica si el asiento existe
+                           
                           
                                 while (moneda <= 1)
                                 {
@@ -1037,8 +1075,8 @@ namespace WpfApplication1
                                             cobroTotal.Add(new mCobros("16298", sucursal, facturas, sumLanve, 0, "Lanve"));
                                         if (sumInterbank != 0)
                                             cobroTotal.Add(new mCobros("16292", sucursal, facturas, sumInterbank, 0, "Interbank"));
-                                        if (sumGrifo != 0)
-                                            cobroTotal.Add(new mCobros("16300", sucursal, facturas, sumGrifo, 0, "Grifo"));
+                                     //   if (sumGrifo != 0)
+                                       ///     cobroTotal.Add(new mCobros("16300", sucursal, facturas, sumGrifo, 0, "Grifo"));
 
                                         if (activado == true)
                                         {
@@ -1046,7 +1084,7 @@ namespace WpfApplication1
                                             activado = false;
                                             indice = 0;
                                         }
-                                        sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, tiendas[i - 1, j - 1, 1], facturas, t, conex2, movi, vouc, ref indice);
+                                        sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, serie, facturas, t, conex2, movi, vouc, ref indice, cliente, ruc, direccion);
                                         cobroTotal.Clear();
                                     }
                                     else
@@ -1065,7 +1103,7 @@ namespace WpfApplication1
                                                 activado = false;
                                             }
 
-                                            sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, tiendas[i - 1, j - 1, 1], facturas, t, conex2, movi, vouc, ref indice);
+                                            sincronizarCobro(vg.Anio, vg.Periodo, vg.Libro, vg.Glosa, fechaSql, serie, facturas, t, conex2, movi, vouc, ref indice, cliente, ruc, direccion);
                                             cobroTotal.Clear();
                                         }
                                     }
@@ -1084,7 +1122,7 @@ namespace WpfApplication1
 
                 }
                }
-            }
+            }//aqui el cierre de otra cosa
         }
     
         ///// verificacion
@@ -1101,6 +1139,7 @@ namespace WpfApplication1
             string[,] tiendas =  { {"Miraflores","B001"}, {"Miraflores","F001"}, {"Miraflores","BC01"}, {"Miraflores","FC01"},
                                    {"Miraflores","B006"}, {"Miraflores","F006"},{"Miraflores","BC06"}, {"Miraflores","FC06"},
                                    {"Surco","B002"}, {"Surco","F002"}, {"Surco","BC02"}, {"Surco","FC02"}, 
+                                   {"Surco","B007"}, {"Surco","F007"}, {"Surco","BC07"}, {"Surco","FC07"}, 
                                    {"San Isidro","B004"}, {"San Isidro","F004"}, {"San Isidro","BC04"}, {"San Isidro","FC04"},
                                    {"San Isidro","B005"}, {"San Isidro","F005"}, {"San Isidro","BC05"}, {"San Isidro","FC05"}};
             string t = "";
@@ -1140,12 +1179,16 @@ namespace WpfApplication1
                     Conexion cn = new Conexion(conex1);
                     sql = @"SELECT A.NUMFACTURA AS NUMERO,0 AS total,0 as totiva,0 as totreq, 0 as baseimponibre, '' as cliente, '' ruc,'' DIRECCION
                             FROM FACTURASVENTA AS A inner join CLIENTES c on c.CODCLIENTE = a.CODCLIENTE  
-                            where a.FECHAENTRADA = '" + fechaSql + "' and a.NUMSERIE = '" + tiendas[j-1, 1] + "' and a.TOTALNETO = 0 ";
-                    sql = sql + @" union 
-                        SELECT numero,total,totiva,totreq,baseimponible,NOMBRECLIENTE cliente,NIF20 ruc,DIRECCION1 DIRECCION
-                         from FACTURASVENTA b right outer join FACTURASVENTATOT a on a.NUMERO = b.NUMFACTURA and a.SERIE = b.NUMSERIE 
-                         inner join clientes  c on c.CODCLIENTE = b.CODCLIENTE
-                        where b.FECHAENTRADA = '" + fechaSql + "' and a.SERIE = '" + tiendas[j-1, 1] + "'  order by NUMERO";
+                            where a.FECHAENTRADA = '" + fechaSql + "' and a.NUMSERIE = '" + tiendas[j-1, 1] + "' and a.TOTALNETO = 0 "
+                        + @" union 
+                            SELECT numero,SUM(total),SUM(totiva),SUM(totreq),SUM(baseimponible),COALESCE(NOMBRECLIENTE,'') cliente,COALESCE(NIF20,'') ruc,COALESCE(DIRECCION1,'') DIRECCION
+                             from FACTURASVENTA b right outer join FACTURASVENTATOT a on a.NUMERO = b.NUMFACTURA and a.SERIE = b.NUMSERIE 
+                             inner join clientes  c on c.CODCLIENTE = b.CODCLIENTE
+                             where b.FECHAENTRADA = '" + fechaSql + "' and a.SERIE = '" + tiendas[j - 1, 1] + @"' 
+                             group by numero,NOMBRECLIENTE,NIF20, DIRECCION1
+                             order by NUMERO";
+                         
+                      
                     SqlDataReader reader = cn.consulta3(sql);
                     //se le asigna a cada cuenta contable el valor correpondiente de la venta, para despues realizar una agrupacion y sacar la diferencia
                     if (reader.HasRows)
@@ -1198,20 +1241,14 @@ namespace WpfApplication1
                                 rc = Math.Round(venta.Sum(x => x.cuenta == "40997" ? x.haber : 0), 2);
                                 bi = Math.Round(venta.Sum(x => x.cuenta == "70111" ? x.haber : 0), 2);
                                 totalNeto = igv + rc + bi;
-                                foreach (var cl in venta)
-                                {
-                                    Console.WriteLine(cl.cuenta);
-                                    //or print the property of your class
-                                }
+                                
                                 if (cxc != Math.Round(totalNeto, 2))
                                 {
                                     MostrarLista unMostrar = new MostrarLista();
                                     unMostrar.Fecha = fecha.ToString("dd-MM-yyyy");
                                     unMostrar.Tienda = tiendas[j - 1, 0];
                                     ListaMostrar.Add(unMostrar);
-                                    // mv.Message = "Hay un error en la siguiente fecha " + p;
-                                    // mv.Caption = "Titulo";
-                                    // mv.mensajeria();
+                                    
                                 }
 
                        // no hay error en el asiento es decir no hay diferencia en la cxc y el total neto
@@ -1225,6 +1262,7 @@ namespace WpfApplication1
                                         mv.Message = "El Asiento ya Existe, por favor Verifique";
                                         mv.Caption = "Error Asiento existente";
                                         mv.mensajeria();
+                                        j = 21;
                                     }
                                     else // en caso de qeu no exista crea la cabecera y crea el asiento
                                     {
@@ -1266,8 +1304,7 @@ namespace WpfApplication1
 
                                 //Asignacion de resultados para crear el asiento cabecera
                                 totalNeto = igv + rc + bi;
-                                //i == 1 ? "MIRAFLORES" : i == 2 ? "SURCO" : i == 3 ? "SAN ISIDRO" : "SAN ISIDRO";
-                                //    tienda[i - 1] == "001T;" ? "MIRAFLORES" : tienda[i - 1] == "006T" ? "SURCO" : "SAN ISIDRO"; 
+                                
                                 vg.Anio = fecha.Year.ToString();
                                 vg.Periodo = fecha.ToString("MM");
                                 vg.Libro = "05";
@@ -1282,9 +1319,7 @@ namespace WpfApplication1
                                     unMostrar.Fecha = fecha.ToString("dd-MM-yyyy");
                                     unMostrar.Tienda = tiendas[j - 1, 0];
                                     ListaMostrar.Add(unMostrar);
-                                    // mv.Message = "Hay un error en la siguiente fecha " + p;
-                                    // mv.Caption = "Titulo";
-                                    // mv.mensajeria();
+                                    
                                 }
 
                                 // no hay error en el asiento es decir no hay diferencia en la cxc y el total neto
@@ -1298,6 +1333,7 @@ namespace WpfApplication1
                                         mv.Message = "El Asiento ya Existe, por favor Verifique";
                                         mv.Caption = "Error Asiento existente";
                                         mv.mensajeria();
+                                        j = 21;
                                     }
                                     else // en caso de qeu no exista crea la cabecera y crea el asiento
                                     {
